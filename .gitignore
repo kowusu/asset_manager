@@ -56,3 +56,27 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# STS
+.springBeans
+
+# Others
+.DS_Store
+Thumbs.db
+
+# OS specific
+# Windows
+*.bak
+*.tmp
+*.swp
+*.swo
+*.orig
+*.metadata
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
