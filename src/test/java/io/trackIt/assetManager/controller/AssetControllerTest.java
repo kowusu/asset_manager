@@ -1,5 +1,7 @@
 package io.trackIt.assetManager.controller;
 
+import io.trackIt.assetManager.factory.AssetFactory;
+import io.trackIt.assetManager.factory.EmployeeFactory;
 import io.trackIt.assetManager.model.Asset;
 import io.trackIt.assetManager.model.Employee;
 import io.trackIt.assetManager.service.AssetService;
@@ -17,7 +19,6 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -40,14 +41,11 @@ public class AssetControllerTest {
 
     @BeforeEach
     void setUp() {
-        asset = new Asset();
+        asset = AssetFactory.createAsset();
         asset.setId(1L);
-        asset.setName("Laptop");
-        asset.setDescription("Dell Experian");
 
-        employee = new Employee();
+        employee = EmployeeFactory.createEmployee();
         employee.setId(1L);
-        employee.setName("John Wick");
     }
 
 
@@ -57,8 +55,8 @@ public class AssetControllerTest {
 
         mockMvc.perform(get("/assets"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name").value("Laptop"))
-                .andExpect(jsonPath("$[0].description").value("Dell Experian"));
+                .andExpect(jsonPath("$[0].name").value(asset.getName()))
+                .andExpect(jsonPath("$[0].description").value(asset.getDescription()));
     }
 
     @Test
@@ -67,8 +65,8 @@ public class AssetControllerTest {
 
         mockMvc.perform(get("/assets/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Laptop"))
-                .andExpect(jsonPath("$.description").value("Dell Experian"));
+                .andExpect(jsonPath("$.name").value(asset.getName()))
+                .andExpect(jsonPath("$.description").value(asset.getDescription()));
     }
 
     @Test
@@ -79,8 +77,8 @@ public class AssetControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(asset)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Laptop"))
-                .andExpect(jsonPath("$.description").value("Dell Experian"));
+                .andExpect(jsonPath("$.name").value(asset.getName()))
+                .andExpect(jsonPath("$.description").value(asset.getDescription()));
 
     }
 
@@ -92,8 +90,8 @@ public class AssetControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(asset)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Laptop"))
-                .andExpect(jsonPath("$.description").value("Dell Experian"));
+                .andExpect(jsonPath("$.name").value(asset.getName()))
+                .andExpect(jsonPath("$.description").value(asset.getDescription()));
     }
 
     @Test
@@ -104,9 +102,9 @@ public class AssetControllerTest {
 
         mockMvc.perform(put("/assets/1/assign/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Laptop"))
-                .andExpect(jsonPath("$.description").value("Dell Experian"))
-                .andExpect(jsonPath("$.employee.name").value("John Wick"));
+                .andExpect(jsonPath("$.name").value(asset.getName()))
+                .andExpect(jsonPath("$.description").value(asset.getDescription()))
+                .andExpect(jsonPath("$.employee.name").value(employee.getName()));
     }
 
     @Test
@@ -121,7 +119,7 @@ public class AssetControllerTest {
 
         mockMvc.perform(get("/assets/unassigned"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name").value("Laptop"))
-                .andExpect(jsonPath("$[0].description").value("Dell Experian"));
+                .andExpect(jsonPath("$[0].name").value(asset.getName()))
+                .andExpect(jsonPath("$[0].description").value(asset.getDescription()));
     }
 }

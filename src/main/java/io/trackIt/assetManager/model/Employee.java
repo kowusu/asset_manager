@@ -1,4 +1,5 @@
 package io.trackIt.assetManager.model;
+
 import lombok.Data;
 
 import jakarta.persistence.*;

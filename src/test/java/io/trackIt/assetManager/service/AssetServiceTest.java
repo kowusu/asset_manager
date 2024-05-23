@@ -1,5 +1,7 @@
 package io.trackIt.assetManager.service;
 
+import io.trackIt.assetManager.factory.AssetFactory;
+import io.trackIt.assetManager.factory.EmployeeFactory;
 import io.trackIt.assetManager.model.Asset;
 import io.trackIt.assetManager.model.Employee;
 import io.trackIt.assetManager.repository.AssetRepository;
@@ -35,8 +37,8 @@ public class AssetServiceTest {
 
     @Test
     void getAllAssets(){
-        Asset asset1 = new Asset();
-        Asset asset2 = new Asset();
+        Asset asset1 = AssetFactory.createAsset();
+        Asset asset2 = AssetFactory.createAsset();
         List<Asset> assets = Arrays.asList(asset1, asset2);
 
         when(assetRepository.findAll()).thenReturn(assets);
@@ -49,7 +51,7 @@ public class AssetServiceTest {
 
     @Test
     void getAssetById() {
-        Asset asset = new Asset();
+        Asset asset = AssetFactory.createAsset();
         asset.setId(1L);
 
         when(assetRepository.findById(1L)).thenReturn(Optional.of(asset));
@@ -63,7 +65,7 @@ public class AssetServiceTest {
 
     @Test
     void createAssert() {
-        Asset asset = new Asset();
+        Asset asset = AssetFactory.createAsset();
 
         when(assetRepository.save(asset)).thenReturn(asset);
 
@@ -75,9 +77,9 @@ public class AssetServiceTest {
 
     @Test
     void updateAsset() {
-        Asset existingAsset = new Asset();
+        Asset existingAsset = AssetFactory.createAsset();
         existingAsset.setId(1L);
-        Asset updatedAsset = new Asset();
+        Asset updatedAsset = AssetFactory.createAsset();
         updatedAsset.setName("MacBook Pro 123");
         updatedAsset.setDescription("Macbook Pro model 2024");
 
@@ -93,9 +95,9 @@ public class AssetServiceTest {
 
     @Test
     void assignAssetToEmployee() {
-        Asset existingAsset = new Asset();
+        Asset existingAsset = AssetFactory.createAsset();
         existingAsset.setId(1L);
-        Employee employee = new Employee();
+        Employee employee = EmployeeFactory.createEmployee();
         employee.setId(1L);
 
         when(assetRepository.findById(1L)).thenReturn(Optional.of(existingAsset));
@@ -110,7 +112,7 @@ public class AssetServiceTest {
 
     @Test
     void deleteAsset() {
-        Asset asset = new Asset();
+        Asset asset = AssetFactory.createAsset();
         asset.setId(1L);
 
         doNothing().when(assetRepository).deleteById(1L);
@@ -122,8 +124,8 @@ public class AssetServiceTest {
 
     @Test
     void getUnassignedAssets() {
-        Asset asset1 = new Asset();
-        Asset asset2 = new Asset();
+        Asset asset1 = AssetFactory.createAsset();
+        Asset asset2 = AssetFactory.createAsset();
         List<Asset> assets = Arrays.asList(asset1, asset2);
 
         when(assetRepository.findByEmployeeIsNull()).thenReturn(assets);

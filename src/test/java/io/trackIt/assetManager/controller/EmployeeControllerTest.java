@@ -1,5 +1,6 @@
 package io.trackIt.assetManager.controller;
 
+import io.trackIt.assetManager.factory.EmployeeFactory;
 import io.trackIt.assetManager.model.Employee;
 import io.trackIt.assetManager.service.EmployeeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,9 +37,8 @@ public class EmployeeControllerTest {
 
     @BeforeEach
     void setUp() {
-        employee = new Employee();
+        employee = EmployeeFactory.createEmployee();
         employee.setId(1L);
-        employee.setName("John Wick");
     }
 
     @Test
@@ -47,7 +47,7 @@ public class EmployeeControllerTest {
 
         mockMvc.perform(get("/employees"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name").value("John Wick"));
+                .andExpect(jsonPath("$[0].name").value(employee.getName()));
     }
 
     @Test
@@ -56,7 +56,7 @@ public class EmployeeControllerTest {
 
         mockMvc.perform(get("/employees/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("John Wick"));
+                .andExpect(jsonPath("$.name").value(employee.getName()));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class EmployeeControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(employee)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("John Wick"));
+                .andExpect(jsonPath("$.name").value(employee.getName()));
     }
 
     @Test
@@ -78,7 +78,7 @@ public class EmployeeControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(employee)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("John Wick"));
+                .andExpect(jsonPath("$.name").value(employee.getName()));
     }
 
     @Test
@@ -93,6 +93,6 @@ public class EmployeeControllerTest {
 
         mockMvc.perform(get("/employees/without-assets"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name").value("John Wick"));
+                .andExpect(jsonPath("$[0].name").value(employee.getName()));
     }
 }

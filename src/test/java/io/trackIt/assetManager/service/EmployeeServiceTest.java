@@ -1,5 +1,6 @@
 package io.trackIt.assetManager.service;
 
+import io.trackIt.assetManager.factory.EmployeeFactory;
 import io.trackIt.assetManager.model.Employee;
 import io.trackIt.assetManager.repository.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,8 +32,8 @@ public class EmployeeServiceTest {
 
     @Test
     void getAllEmployees(){
-        Employee employee1 = new Employee();
-        Employee employee2 = new Employee();
+        Employee employee1 = EmployeeFactory.createEmployee();
+        Employee employee2 = EmployeeFactory.createEmployee();
         List<Employee> employees = Arrays.asList(employee1, employee2);
 
         when(employeeRepository.findAll()).thenReturn(employees);
@@ -45,7 +46,7 @@ public class EmployeeServiceTest {
 
     @Test
     void getEmployeeById() {
-        Employee employee = new Employee();
+        Employee employee = EmployeeFactory.createEmployee();
         employee.setId(1L);
 
         when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
@@ -58,7 +59,7 @@ public class EmployeeServiceTest {
 
     @Test
     void createEmployee() {
-        Employee employee = new Employee();
+        Employee employee = EmployeeFactory.createEmployee();
 
         when(employeeRepository.save(employee)).thenReturn(employee);
 
@@ -70,9 +71,9 @@ public class EmployeeServiceTest {
 
     @Test
     void updateEmployee() {
-        Employee existingEmployee = new Employee();
+        Employee existingEmployee = EmployeeFactory.createEmployee();
         existingEmployee.setId(1L);
-        Employee updatedEmployee = new Employee();
+        Employee updatedEmployee = EmployeeFactory.createEmployee();
         updatedEmployee.setName("Bob Hope");
 
         when(employeeRepository.findById(1L)).thenReturn(Optional.of(existingEmployee));
@@ -88,7 +89,7 @@ public class EmployeeServiceTest {
 
     @Test
     void deleteEmployee() {
-        Employee employee = new Employee();
+        Employee employee = EmployeeFactory.createEmployee();
         employee.setId(1L);
 
         doNothing().when(employeeRepository).deleteById(1L);
@@ -100,8 +101,8 @@ public class EmployeeServiceTest {
 
     @Test
     void getEmployeesWithoutAssets() {
-        Employee employee1 = new Employee();
-        Employee employee2 = new Employee();
+        Employee employee1 = EmployeeFactory.createEmployee();
+        Employee employee2 = EmployeeFactory.createEmployee();
         List<Employee> employees = Arrays.asList(employee1, employee2);
 
         when(employeeRepository.findByAssetsIsNull()).thenReturn(employees);
