@@ -1,7 +1,9 @@
 package io.trackIt.assetManager.service;
 
 import io.trackIt.assetManager.model.Asset;
+import io.trackIt.assetManager.model.Employee;
 import io.trackIt.assetManager.repository.AssetRepository;
+import io.trackIt.assetManager.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,6 +14,9 @@ import java.util.Optional;
 public class AssetService {
     @Autowired
     private AssetRepository assetRepository;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
     public List<Asset> getAllAssets() {
         return assetRepository.findAll();
@@ -29,6 +34,17 @@ public class AssetService {
         Asset asset = assetRepository.findById(id).orElseThrow(() -> new RuntimeException("Asset not found"));
         asset.setName((assetDetails.getName()));
         asset.setDescription(assetDetails.getDescription());
+        return assetRepository.save(asset);
+    }
+
+    public Asset assignAssetToEmployee(Long assetId, Long employeeId) {
+        Asset asset = assetRepository.findById(assetId)
+                .orElseThrow(() -> new RuntimeException("Asset not found."));
+
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new RuntimeException("Employee not found."));
+
+        asset.setEmployee(employee);
         return assetRepository.save(asset);
     }
 

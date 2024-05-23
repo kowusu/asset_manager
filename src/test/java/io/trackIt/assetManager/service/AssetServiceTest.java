@@ -1,8 +1,9 @@
 package io.trackIt.assetManager.service;
 
 import io.trackIt.assetManager.model.Asset;
+import io.trackIt.assetManager.model.Employee;
 import io.trackIt.assetManager.repository.AssetRepository;
-import org.checkerframework.checker.units.qual.A;
+import io.trackIt.assetManager.repository.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -23,6 +24,9 @@ public class AssetServiceTest {
 
     @Mock
     private AssetRepository assetRepository;
+
+    @Mock
+    private EmployeeRepository employeeRepository;
 
     @BeforeEach
     void setUp() {
@@ -85,6 +89,23 @@ public class AssetServiceTest {
         assertNotNull(result);
         assertEquals("MacBook Pro 123", result.getName());
         assertEquals("Macbook Pro model 2024", result.getDescription());
+    }
+
+    @Test
+    void assignAssetToEmployee() {
+        Asset existingAsset = new Asset();
+        existingAsset.setId(1L);
+        Employee employee = new Employee();
+        employee.setId(1L);
+
+        when(assetRepository.findById(1L)).thenReturn(Optional.of(existingAsset));
+        when(assetRepository.save(existingAsset)).thenReturn(existingAsset);
+        when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
+
+        Asset result = assetService.assignAssetToEmployee(1L, 1L);
+
+        assertNotNull(result);
+        assertEquals(result.getEmployee(), employee);
     }
 
     @Test

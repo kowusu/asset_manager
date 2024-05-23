@@ -1,6 +1,7 @@
 package io.trackIt.assetManager.controller;
 
 import io.trackIt.assetManager.model.Asset;
+import io.trackIt.assetManager.model.Employee;
 import io.trackIt.assetManager.service.AssetService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -34,6 +36,7 @@ public class AssetControllerTest {
     private ObjectMapper objectMapper;
 
     private Asset asset;
+    private Employee employee;
 
     @BeforeEach
     void setUp() {
@@ -41,6 +44,10 @@ public class AssetControllerTest {
         asset.setId(1L);
         asset.setName("Laptop");
         asset.setDescription("Dell Experian");
+
+        employee = new Employee();
+        employee.setId(1L);
+        employee.setName("John Wick");
     }
 
 
@@ -87,6 +94,19 @@ public class AssetControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Laptop"))
                 .andExpect(jsonPath("$.description").value("Dell Experian"));
+    }
+
+    @Test
+    void assignAssetToEmployee() throws Exception {
+        asset.setEmployee(employee);
+
+        when(assetService.assignAssetToEmployee(anyLong(), anyLong())).thenReturn(asset);
+
+        mockMvc.perform(put("/assets/1/assign/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Laptop"))
+                .andExpect(jsonPath("$.description").value("Dell Experian"))
+                .andExpect(jsonPath("$.employee.name").value("John Wick"));
     }
 
     @Test

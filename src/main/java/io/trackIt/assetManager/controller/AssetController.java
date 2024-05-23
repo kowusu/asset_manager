@@ -34,6 +34,11 @@ public class AssetController {
         return ResponseEntity.ok(assetService.updateAsset(id, assetDetails));
     }
 
+    @PutMapping("/{assetId}/assign/{employeeId}")
+    public ResponseEntity<Asset> assignAssetToEmployee(@PathVariable Long assetId, @PathVariable Long employeeId) {
+        return ResponseEntity.ok(assetService.assignAssetToEmployee(assetId, employeeId));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAsset(@PathVariable Long id){
         assetService.deleteAsset(id);
